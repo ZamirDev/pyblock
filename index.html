@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PyBlocks — Learn Python by snapping blocks</title>
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='42' cy='50' r='14' fill='%23FFB3BA' stroke='%233D2C2E' stroke-width='5'/%3E%3Ccircle cx='42' cy='50' r='5' fill='%233D2C2E'/%3E%3Cpath d='M56 50c8 4 14 0 18-8' fill='none' stroke='%233D2C2E' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <svg class="mascot" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M20 78 Q30 52 56 58 Q86 65 80 84 Q76 97 60 92" fill="#9FE6A0" stroke="#3D2C2E" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="52" cy="66" r="4.5" fill="#3D2C2E"/>
+          <path d="M44 63 Q49 59 53 63" fill="none" stroke="#3D2C2E" stroke-width="3" stroke-linecap="round"/>
+          <path d="M56 50c8 4 14 0 18-8" fill="none" stroke="#3D2C2E" stroke-width="5" stroke-linecap="round"/>
+          <path d="M66 46l8-6M72 42l6 4" fill="none" stroke="#3D2C2E" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <div class="brand-name">
+          <h1>PyBlocks</h1>
+          <span>snap · play · learn Python</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <div id="runStatus" class="run-status">⏳ loading Python…</div>
+        <button id="clearBtn" class="btn btn-ghost" title="Reset workspace">🧹 Reset</button>
+        <button id="saveBtn" class="btn btn-ghost" title="Save this project in your browser">💾 Save</button>
+        <button id="runBtn" class="btn btn-run" disabled>▶ Run</button>
+      </div>
+    </header>
+
+    <main class="app">
+      <div id="workspaceWrap" class="workspace-wrap">
+        <div id="blocklyArea" class="blockly-area"></div>
+      </div>
+
+      <aside class="panels">
+        <div class="panel-tabs">
+          <button id="tabOutput" class="tab active" data-panel="output">💬 Output</button>
+          <button id="tabCode" class="tab" data-panel="code">🐍 Code</button>
+          <button id="copyCodeBtn" class="copy-btn" title="Copy generated Python">⧉</button>
+        </div>
+        <div id="outputPanel" class="panel active">
+          <div id="console" class="console">
+            <div class="console-hint">Hit ▶ Run to see your program's output here!</div>
+          </div>
+        </div>
+        <div id="codePanel" class="panel">
+          <pre id="codeView" class="code-view"># Generated Python will appear here</pre>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footbar">
+      <span>Made for curious minds · basic Python: print · lists · tuples · dicts · loops · if/else</span>
+    </footer>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
