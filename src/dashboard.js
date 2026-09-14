@@ -92,7 +92,7 @@ export function setupDashboard({ workspace, loadDefaultProgram, loadInputDemo, p
   buildNav(tb);
   wireNav(tb);
   wireIdeas(views, workspace, loadDefaultProgram, loadInputDemo, pythonFromWorkspace);
-  wireRouting(r, views, tb);
+  wireRouting(r, views, tb, workspace);
 }
 
 /* ------------------------------------------------------------- views --- */
@@ -227,7 +227,7 @@ function wireIdeas(views, workspace, loadDefaultProgram, loadInputDemo, pythonFr
 
 /* ---------------------------------------------------------- routing --- */
 
-function wireRouting(r, views, tb) {
+function wireRouting(r, views, tb, workspace) {
   function visit() {
     const hash = location.hash || '#/';
     const route = hash.replace(/^#\/?/, '').split('/')[0] || 'home';

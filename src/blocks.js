@@ -111,15 +111,15 @@ pythonGenerator.forBlock['pyb_tuple_create'] = function (block, generator) {
     const code = generator.valueToCode(block, `ITEM${i}`, Order.ATOMIC);
     if (code) items.push(code);
   }
-  if (items.length === 0) return '()';
-  if (items.length === 1) return `(${items[0]},)`;
-  return `(${items.join(', ')})`;
+  if (items.length === 0) return ['()', Order.ATOMIC];
+  if (items.length === 1) return [`(${items[0]},)`, Order.ATOMIC];
+  return [`(${items.join(', ')})`, Order.ATOMIC];
 };
 
 pythonGenerator.forBlock['pyb_tuple_item'] = function (block, generator) {
-  const index = generator.valueToCode(block, 'INDEX', Order.MEMBER);
-  const tuple = generator.valueToCode(block, 'TUPLE', Order.MEMBER);
-  return `(${tuple})[(${index}) - 1]`;
+  const index = generator.valueToCode(block, 'INDEX', Order.MEMBER) || '1';
+  const tuple = generator.valueToCode(block, 'TUPLE', Order.MEMBER) || '()';
+  return [`(${tuple})[(${index}) - 1]`, Order.MEMBER];
 };
 
 pythonGenerator.forBlock['pyb_dict_create'] = function (block, generator) {
@@ -127,28 +127,28 @@ pythonGenerator.forBlock['pyb_dict_create'] = function (block, generator) {
   for (let i = 0; i < 3; i++) {
     const v = generator.valueToCode(block, `V${i}`, Order.ATOMIC);
     if (!v) continue;
-    const k = generator.valueToCode(block, `K${i}`, Order.ATOMIC);
+    const k = generator.valueToCode(block, `K${i}`, Order.ATOMIC) || "''";
     pairs.push(`${k}: ${v}`);
   }
-  return `{${pairs.join(', ')}}`;
+  return [`{${pairs.join(', ')}}`, Order.ATOMIC];
 };
 
 // 6 fields: K0 V0 K1 V1 K2 V2 — but valueToCode for K goes first? Blockly fills in order given in message0
 pythonGenerator.forBlock['pyb_dict_get'] = function (block, generator) {
-  const key = generator.valueToCode(block, 'KEY', Order.ATOMIC);
-  const dict = generator.valueToCode(block, 'DICT', Order.MEMBER);
-  return `${dict}[${key}]`;
+  const key = generator.valueToCode(block, 'KEY', Order.ATOMIC) || "''";
+  const dict = generator.valueToCode(block, 'DICT', Order.MEMBER) || '{}';
+  return [`${dict}[${key}]`, Order.MEMBER];
 };
 
 pythonGenerator.forBlock['pyb_dict_has'] = function (block, generator) {
-  const key = generator.valueToCode(block, 'KEY', Order.ATOMIC);
-  const dict = generator.valueToCode(block, 'DICT', Order.MEMBER);
-  return `(${key} in ${dict})`;
+  const key = generator.valueToCode(block, 'KEY', Order.ATOMIC) || "''";
+  const dict = generator.valueToCode(block, 'DICT', Order.MEMBER) || '{}';
+  return [`(${key} in ${dict})`, Order.ATOMIC];
 };
 
 pythonGenerator.forBlock['pyb_dict_length'] = function (block, generator) {
-  const dict = generator.valueToCode(block, 'DICT', Order.ATOMIC);
-  return `len(${dict})`;
+  const dict = generator.valueToCode(block, 'DICT', Order.ATOMIC) || '{}';
+  return [`len(${dict})`, Order.FUNCTION_CALL];
 };
 
 pythonGenerator.forBlock['pyb_friendly_error'] = function (block, generator) {
@@ -158,7 +158,7 @@ pythonGenerator.forBlock['pyb_friendly_error'] = function (block, generator) {
 
 pythonGenerator.forBlock['pyb_input'] = function (block, generator) {
   const prompt = generator.valueToCode(block, 'PROMPT', Order.ATOMIC) || "''";
-  return `input(${prompt})`;
+  return [`input(${prompt})`, Order.FUNCTION_CALL];
 };
 
 export function pythonFromWorkspace(workspace) {

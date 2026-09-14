@@ -10,6 +10,11 @@
 const PYODIDE_VERSION = '0.26.4';
 const PYODIDE_ROUTE = './pyodide/';
 
+function askWithBrowserPrompt(promptText = 'Input:') {
+  const answer = window.prompt(String(promptText ?? ''));
+  return answer ?? '';
+}
+
 function loadScript(src) {
   return new Promise((resolve, reject) => {
     const s = document.createElement('script');
@@ -22,7 +27,24 @@ function loadScript(src) {
 
 export async function createPythonPower() {
   await loadScript(`${PYODIDE_ROUTE}pyodide.js`);
-  const pyodide = await window.loadPyodide({ indexURL: PYODIDE_ROUTE });
+  const pyodide = await window.loadPyodide({
+    indexURL: PYODIDE_ROUTE,
+    stdin: () => askWithBrowserPrompt(),
+  });
+
+  pyodide.registerJsModule('pyblocks_io', {
+    prompt: askWithBrowserPrompt,
+  });
+  pyodide.runPython(`
+import builtins
+from pyblocks_io import prompt as __pyblocks_prompt
+
+def __pyblocks_input(prompt=""):
+    answer = __pyblocks_prompt(str(prompt))
+    return "" if answer is None else str(answer)
+
+builtins.input = __pyblocks_input
+`);
 
   let out = null;
   let err = null;
